@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'realm-android'
+
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -35,4 +39,10 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel-android:1.12.0'
     implementation 'com.beust:klaxon:3.0.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
+}
+
+kapt {
+    arguments {
+        arg("realm.ignoreKotlinNullability", true)
+    }
 }

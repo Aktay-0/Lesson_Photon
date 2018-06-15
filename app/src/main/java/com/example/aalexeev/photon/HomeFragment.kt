@@ -8,11 +8,11 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.beust.klaxon.Klaxon
 import com.example.aalexeev.photon.R.layout
-import com.github.kittinunf.fuel.httpGet
+import com.example.aalexeev.photon.photonapi.PhotonApi
+import com.example.aalexeev.photon.realmModels.PhotocardModel
+import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_home.*
-import java.nio.charset.Charset
 
 class HomeFragment : Fragment() {
 
@@ -29,25 +29,22 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         home_toolbar.inflateMenu(R.menu.menu_home_toolbar)
-        val photocards = mutableListOf<CardInfo>()
+        photocardList.adapter = HomeImageListAdapter(listOf(CardInfo()))
+        photocardList.layoutManager = GridLayoutManager(context, 2)
 
-        "http://207.154.248.163:5000/photocard/list?limit=10&offset=0".httpGet().
-            response { request, response, result ->
-            val dataList = Klaxon().parseArray<ResponseModel>(result.component1()!!.toString(Charset.defaultCharset()))
-            dataList?.forEach {
-                photocards.add(CardInfo(it.photo, it.favorits, it.views))
-            }
-                photocards.sortByDescending { it.countWatch }
-            photocardList.layoutManager = GridLayoutManager(context, 2)
-            photocardList.adapter = HomeImageListAdapter(photocards)
+        Realm.init(context)
+        val realm = Realm.getDefaultInstance()
+        realm.beginTransaction()
+
+        val dataList = realm.where(PhotocardModel::class.java).findAll()
+        val cards = mutableListOf<CardInfo>()
+
+        dataList.forEach {
+            cards.add(CardInfo(it.photo, it.favorits, it.views))
         }
+
+        photocardList.adapter = HomeImageListAdapter(cards)
+
+        realm.commitTransaction()
     }
 }
-
-data class ResponseModel(val owner: String, val title: String, val photo: String,
-                         val active: Boolean, val updated: String, val created: String,
-                         val views: Int, val favorits: Int, val filters: Filters,
-                         val tags: List<String>, val id: String)
-
-data class Filters(val lightDirection: String, val nuances: String, val decor: String,
-                   val dish: String, val light: String, val temperature: String)

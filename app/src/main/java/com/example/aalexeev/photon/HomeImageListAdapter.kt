@@ -27,9 +27,13 @@ class HomeImageListAdapter(private val cardList: List<CardInfo>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Picasso.get().load(cardList[position].image).into(holder.cardImage)
-        holder.countLike.text = cardList[position].countLike.toString()
-        holder.countWatch.text = cardList[position].countWatch.toString()
+        if (cardList[position].image == "") holder.cardImage.visibility = View.GONE
+        else {
+            val card = cardList[position]
+            Picasso.get().load(card.image).into(holder.cardImage)
+            holder.countLike.text = card.countLike.toString()
+            holder.countWatch.text = card.countWatch.toString()
+        }
     }
 
     override fun getItemCount() = cardList.size
