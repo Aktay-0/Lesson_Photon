@@ -1,18 +1,15 @@
 package com.example.aalexeev.photon
 
+import android.annotation.TargetApi
 import android.app.Fragment
-import android.net.Uri
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.beust.klaxon.JsonArray
 import com.beust.klaxon.Klaxon
 import com.example.aalexeev.photon.R.layout
-import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.httpGet
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.nio.charset.Charset
@@ -28,17 +25,20 @@ class HomeFragment : Fragment() {
         return inflater!!.inflate(layout.fragment_home, null)
     }
 
+    @TargetApi(VERSION_CODES.M)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         home_toolbar.inflateMenu(R.menu.menu_home_toolbar)
         val photocards = mutableListOf<CardInfo>()
 
-        "http://207.154.248.163:5000/photocard/list?limit=10&offset=0".httpGet().response { request, response, result ->
+        "http://207.154.248.163:5000/photocard/list?limit=10&offset=0".httpGet().
+            response { request, response, result ->
             val dataList = Klaxon().parseArray<ResponseModel>(result.component1()!!.toString(Charset.defaultCharset()))
             dataList?.forEach {
-                photocards.add(CardInfo(Uri.parse(it.photo), it.favorits, it.views))
+                photocards.add(CardInfo(it.photo, it.favorits, it.views))
             }
-            photocardList.layoutManager = GridLayoutManager(activity, 2)
+                photocards.sortByDescending { it.countWatch }
+            photocardList.layoutManager = GridLayoutManager(context, 2)
             photocardList.adapter = HomeImageListAdapter(photocards)
         }
     }
