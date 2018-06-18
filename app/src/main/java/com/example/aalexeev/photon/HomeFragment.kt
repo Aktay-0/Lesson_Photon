@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.aalexeev.photon.R.layout
-import com.example.aalexeev.photon.photonapi.PhotonApi
 import com.example.aalexeev.photon.realmModels.PhotocardModel
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -34,7 +33,6 @@ class HomeFragment : Fragment() {
 
         Realm.init(context)
         val realm = Realm.getDefaultInstance()
-        realm.beginTransaction()
 
         val dataList = realm.where(PhotocardModel::class.java).findAll()
         val cards = mutableListOf<CardInfo>()
@@ -45,6 +43,17 @@ class HomeFragment : Fragment() {
 
         photocardList.adapter = HomeImageListAdapter(cards)
 
-        realm.commitTransaction()
+        home_toolbar.setOnMenuItemClickListener {
+            val ft = fragmentManager.beginTransaction()
+
+            val fragment = when (it.itemId) {
+                R.id.toolbarSearch -> SearchFragment()
+                else -> return@setOnMenuItemClickListener true
+            }
+
+            ft.replace(R.id.mainViewPort, fragment)
+            ft.commit()
+            true
+        }
     }
 }

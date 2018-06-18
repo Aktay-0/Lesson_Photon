@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             ft.replace(R.id.mainViewPort, fragment)
             ft.commit()
 
-            return@setOnNavigationItemSelectedListener true
+            true
         }
     }
 }

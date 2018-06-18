@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 
-class HomeImageListAdapter(private val cardList: List<CardInfo>) :
+class HomeImageListAdapter(cards: List<CardInfo>) :
     RecyclerView.Adapter<HomeImageListAdapter.ViewHolder>() {
+
+    private val cardList = cards.sortedByDescending { it.countWatch }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cardImage: android.support.v7.widget.AppCompatImageView = itemView.findViewById(R.id.imageCard)

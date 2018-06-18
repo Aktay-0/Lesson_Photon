@@ -2,6 +2,7 @@ package com.example.aalexeev.photon.realmModels
 
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 open class PhotocardModel() : RealmObject() {
     var owner: String = ""
@@ -14,6 +15,7 @@ open class PhotocardModel() : RealmObject() {
     var favorits: Int = 0
     var filters: FiltersModel? = null
     var tags: RealmList<String> = RealmList()
+    @PrimaryKey
     var id: String = ""
 }
 
