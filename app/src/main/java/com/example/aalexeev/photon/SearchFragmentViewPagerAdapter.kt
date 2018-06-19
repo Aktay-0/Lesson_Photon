@@ -1,26 +1,16 @@
 package com.example.aalexeev.photon
 
 import android.app.Fragment
-import android.support.v4.view.PagerAdapter
-import android.view.View
-import android.view.ViewGroup
+import android.app.FragmentManager
+import android.support.v13.app.FragmentPagerAdapter
 
-class SearchFragmentViewPagerAdapter() : PagerAdapter() {
+class SearchFragmentViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     private var fragments = mutableListOf<Fragment>()
     private var fragmentsTitles = mutableListOf<String>()
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object`
-    }
-
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+    override fun getItem(position: Int): Fragment {
         return fragments[position]
-    }
-
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        fragments.removeAt(position)
-        fragmentsTitles.removeAt(position)
     }
 
     override fun getCount(): Int = fragments.size

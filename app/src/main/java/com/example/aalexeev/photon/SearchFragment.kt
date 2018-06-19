@@ -9,18 +9,18 @@ import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : Fragment() {
     override fun onCreateView(
-        inflater: LayoutInflater?,
+        inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
+    ): View? {
+        super.onCreateView(inflater!!, container, savedInstanceState)
         return inflater!!.inflate(R.layout.fragment_search, null)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = SearchFragmentViewPagerAdapter()
+        val adapter = SearchFragmentViewPagerAdapter(fragmentManager)
 
         adapter.addFragment(SimpleSearchFragment(), "ПОИСК")
         adapter.addFragment(SearchFiltersFragment(), "ФИЛЬТРЫ")

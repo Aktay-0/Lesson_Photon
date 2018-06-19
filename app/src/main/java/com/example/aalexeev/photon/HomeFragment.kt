@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         home_toolbar.inflateMenu(R.menu.menu_home_toolbar)
-        photocardList.adapter = HomeImageListAdapter(listOf(CardInfo()))
+        photocardList.adapter = HomeImageListAdapter(listOf(CardInfo()), fragmentManager)
         photocardList.layoutManager = GridLayoutManager(context, 2)
 
         Realm.init(context)
@@ -38,10 +38,10 @@ class HomeFragment : Fragment() {
         val cards = mutableListOf<CardInfo>()
 
         dataList.forEach {
-            cards.add(CardInfo(it.photo, it.favorits, it.views))
+            cards.add(CardInfo(it.id, it.owner, it.photo, it.favorits, it.views))
         }
 
-        photocardList.adapter = HomeImageListAdapter(cards)
+        photocardList.adapter = HomeImageListAdapter(cards, fragmentManager)
 
         home_toolbar.setOnMenuItemClickListener {
             val ft = fragmentManager.beginTransaction()

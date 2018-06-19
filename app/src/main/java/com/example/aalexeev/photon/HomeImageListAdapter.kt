@@ -1,5 +1,6 @@
 package com.example.aalexeev.photon
 
+import android.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 
-class HomeImageListAdapter(cards: List<CardInfo>) :
+class HomeImageListAdapter(cards: List<CardInfo>, val fm: FragmentManager) :
     RecyclerView.Adapter<HomeImageListAdapter.ViewHolder>() {
 
     private val cardList = cards.sortedByDescending { it.countWatch }
@@ -35,6 +36,15 @@ class HomeImageListAdapter(cards: List<CardInfo>) :
             Picasso.get().load(card.image).into(holder.cardImage)
             holder.countLike.text = card.countLike.toString()
             holder.countWatch.text = card.countWatch.toString()
+            holder.cardImage.setOnClickListener {
+                val ft = fm.beginTransaction()
+                val fragment = CardInfoFragment()
+                fragment.cardId = cardList[position].id
+                fragment.userId = cardList[position].owner
+
+                ft.replace(R.id.mainViewPort, fragment)
+                ft.commit()
+            }
         }
     }
 

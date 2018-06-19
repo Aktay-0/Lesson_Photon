@@ -5,7 +5,7 @@ import com.example.aalexeev.photon.realmModels.PhotocardModel
 
 data class PhotocardResponseModel(val owner: String, val title: String, val photo: String,
                          val active: Boolean, val updated: String, val created: String,
-                         val views: Int, val favorits: Int, val filters: Filters,
+                         val views: Int, val favorits: Int, val filters: FiltersResponseModel,
                          val tags: List<String>, val id: String) {
     fun toPhotocardModel(): PhotocardModel {
         val model = PhotocardModel()
@@ -37,5 +37,11 @@ data class PhotocardResponseModel(val owner: String, val title: String, val phot
 
 }
 
-data class Filters(val lightDirection: String, val nuances: String, val decor: String,
+data class FiltersResponseModel(val lightDirection: String, val nuances: String, val decor: String,
                    val dish: String, val light: String, val temperature: String)
+
+data class AlbumResponseModel(val id: String, val owner: String, val title: String, val preview: String,
+                              val description: String, val views: Int, val favorits: Int, val photocards: List<PhotocardResponseModel>)
+
+data class UserInfoResponseModel(val id: String, val name: String, val login: String, val avatar: String,
+                             val albumCount: Int, val photoCardCount: Int, val albums: List<AlbumResponseModel>)
